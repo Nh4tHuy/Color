@@ -3,308 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Màu - Nh4tHuy</title>
+    <title>Dev Toolset</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6.5.1 (Bản mới nhất, khắc phục lỗi không hiện icon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <style>
-        /* Tùy chỉnh thanh cuộn cho nền tối */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5); 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(56, 189, 248, 0.4); 
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(56, 189, 248, 0.8); 
-        }
+        /* Tùy chỉnh thanh cuộn cho nền tối xám */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(24, 24, 27, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(113, 113, 122, 0.5); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(161, 161, 170, 0.8); }
+        
+        /* Hiệu ứng chuyển tab mượt (Tông Đen Xám) */
+        .tab-active { background: rgba(63, 63, 70, 0.5); border-color: rgba(161, 161, 170, 0.5); color: #f4f4f5; }
+        .tab-inactive { background: rgba(24, 24, 27, 0.4); border-color: rgba(255, 255, 255, 0.05); color: #a1a1aa; }
+        .tab-inactive:hover { background: rgba(39, 39, 42, 0.6); color: #e4e4e7; border-color: rgba(255, 255, 255, 0.1); }
     </style>
 </head>
-<body class="min-h-screen font-sans relative overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-blue-500/30 selection:text-blue-200">
+<body class="min-h-screen font-sans relative overflow-x-hidden bg-zinc-950 text-zinc-200 selection:bg-zinc-600/50 selection:text-white">
 
-    <!-- Background Animated Blobs for Glassmorphism Effect -->
+    <!-- Background Animated Blobs for Dark Gray Glassmorphism Effect -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600 opacity-20 blur-[100px] animate-pulse"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-600 opacity-20 blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
-        <div class="absolute top-[30%] left-[60%] w-[30%] h-[30%] rounded-full bg-indigo-600 opacity-20 blur-[80px] animate-pulse" style="animation-delay: 4s;"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-zinc-600 opacity-10 blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-neutral-600 opacity-10 blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-[30%] left-[60%] w-[30%] h-[30%] rounded-full bg-zinc-500 opacity-10 blur-[90px] animate-pulse" style="animation-delay: 4s;"></div>
     </div>
 
     <!-- Main Container -->
     <div class="relative z-10 container mx-auto px-4 py-8 max-w-[1600px]">
         
         <!-- Header Section -->
-        <div class="mb-8 text-center">
-            <h1 class="text-3xl md:text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 drop-shadow-sm">
-                Bảng Màu Glassmorphism
+        <div class="mb-6 text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-500 drop-shadow-sm">
+                Dev Toolset Glassmorphism
             </h1>
-            <p class="text-base text-slate-400 font-medium">
-                Khám phá và sao chép hơn 160+ màu chuẩn và pastel hiện đại
+            <p class="text-base text-zinc-400 font-medium">
+                Công cụ tối giản hỗ trợ chọn Màu sắc & Hơn 350+ Icon FontAwesome cho R / Web
             </p>
         </div>
 
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-4 gap-4 px-2 flex-wrap">
+            <button onclick="switchTab('colors')" id="tab-colors" class="tab-active backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg">
+                <i class="fa-solid fa-palette text-lg"></i>
+                Bảng Màu CSS / R Base
+            </button>
+            <button onclick="switchTab('icons')" id="tab-icons" class="tab-inactive backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg">
+                <i class="fa-solid fa-icons text-lg"></i>
+                Kho Icon FontAwesome (R)
+            </button>
+        </div>
+
+        <!-- Dynamic Instruction Banner -->
+        <div id="tabDescription" class="mb-8 p-4 bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-xl text-zinc-300 text-sm md:text-base transition-all duration-300 shadow-sm mx-auto max-w-4xl text-center">
+            <!-- Text injected via JS -->
+        </div>
+
         <!-- Controls Section (Glass Panel) -->
-        <div class="bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] rounded-2xl p-4 sm:p-6 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="bg-zinc-900/40 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-2xl p-4 sm:p-6 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
             
             <!-- Search Input -->
             <div class="relative w-full md:w-1/2">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400/80">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
                 <input
                     type="text"
                     id="searchInput"
-                    placeholder="Tìm theo tên màu hoặc mã Hex..."
-                    class="w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-slate-800/80 transition-all placeholder-slate-500 text-slate-200 shadow-sm"
+                    placeholder="Tìm theo tên..."
+                    class="w-full pl-11 pr-4 py-2.5 bg-zinc-800/40 border border-zinc-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-500/50 focus:bg-zinc-800/80 transition-all placeholder-zinc-500 text-zinc-200 shadow-sm"
                 />
             </div>
 
-            <!-- Level Filter -->
+            <!-- Level/Category Filter -->
             <div class="relative w-full md:w-auto min-w-[200px]">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400/80">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
+                    <i class="fa-solid fa-filter"></i>
                 </div>
                 <select
-                    id="levelFilter"
-                    class="w-full pl-11 pr-10 py-2.5 appearance-none bg-slate-800/50 border border-slate-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-slate-800/80 transition-all text-slate-200 shadow-sm cursor-pointer"
+                    id="categoryFilter"
+                    class="w-full pl-11 pr-10 py-2.5 appearance-none bg-zinc-800/40 border border-zinc-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-500/50 focus:bg-zinc-800/80 transition-all text-zinc-200 shadow-sm cursor-pointer"
                 >
                     <!-- Options sẽ được render bằng JS -->
                 </select>
                 <!-- Custom Dropdown Arrow -->
                 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                    <svg class="w-4 h-4 text-blue-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <i class="fa-solid fa-chevron-down text-sm text-zinc-400"></i>
                 </div>
             </div>
         </div>
 
         <!-- Status indicator -->
-        <div id="statusIndicator" class="mb-4 text-slate-400 font-medium px-2 text-sm">
-            Đang hiển thị...
+        <div id="statusIndicator" class="mb-4 text-zinc-400 font-medium px-2 text-sm">
+            Đang tải dữ liệu...
         </div>
 
-        <!-- Colors Grid -->
-        <div id="colorGrid" class="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3 sm:gap-4">
+        <!-- Dynamic Grid (Colors or Icons) -->
+        <div id="mainGrid" class="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3 sm:gap-4">
             <!-- Items sẽ được render bằng JS -->
         </div>
     </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 transform translate-y-10 opacity-0 pointer-events-none">
-        <div class="bg-slate-800 text-slate-100 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)] text-sm sm:text-base font-medium flex items-center gap-2 border border-blue-500/30">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <div class="bg-zinc-800 text-zinc-100 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-sm sm:text-base font-medium flex items-center gap-2 border border-zinc-600/50">
+            <i class="fa-solid fa-circle-check text-zinc-300"></i>
             <span id="toastMessage">Đã sao chép!</span>
         </div>
     </div>
 
     <script>
-        // Dữ liệu màu sắc bao gồm bản gốc và các màu bổ sung
+        /* ==========================================
+           1. DATA: COLOR PALETTE
+           ========================================== */
         const colorData = [
             // CSS Level 1
-            { level: 'CSS Level 1', name: 'black', hex: '#000000' },
-            { level: 'CSS Level 1', name: 'silver', hex: '#c0c0c0' },
-            { level: 'CSS Level 1', name: 'gray', hex: '#808080' },
-            { level: 'CSS Level 1', name: 'white', hex: '#ffffff' },
-            { level: 'CSS Level 1', name: 'maroon', hex: '#800000' },
-            { level: 'CSS Level 1', name: 'red', hex: '#ff0000' },
-            { level: 'CSS Level 1', name: 'purple', hex: '#800080' },
-            { level: 'CSS Level 1', name: 'fuchsia', hex: '#ff00ff' },
-            { level: 'CSS Level 1', name: 'green', hex: '#008000' },
-            { level: 'CSS Level 1', name: 'lime', hex: '#00ff00' },
-            { level: 'CSS Level 1', name: 'olive', hex: '#808000' },
-            { level: 'CSS Level 1', name: 'yellow', hex: '#ffff00' },
-            { level: 'CSS Level 1', name: 'navy', hex: '#000080' },
-            { level: 'CSS Level 1', name: 'blue', hex: '#0000ff' },
-            { level: 'CSS Level 1', name: 'teal', hex: '#008080' },
-            { level: 'CSS Level 1', name: 'aqua', hex: '#00ffff' },
-
+            { level: 'CSS Level 1', name: 'black', hex: '#000000' }, { level: 'CSS Level 1', name: 'silver', hex: '#c0c0c0' },
+            { level: 'CSS Level 1', name: 'gray', hex: '#808080' }, { level: 'CSS Level 1', name: 'white', hex: '#ffffff' },
+            { level: 'CSS Level 1', name: 'maroon', hex: '#800000' }, { level: 'CSS Level 1', name: 'red', hex: '#ff0000' },
+            { level: 'CSS Level 1', name: 'purple', hex: '#800080' }, { level: 'CSS Level 1', name: 'fuchsia', hex: '#ff00ff' },
+            { level: 'CSS Level 1', name: 'green', hex: '#008000' }, { level: 'CSS Level 1', name: 'lime', hex: '#00ff00' },
+            { level: 'CSS Level 1', name: 'olive', hex: '#808000' }, { level: 'CSS Level 1', name: 'yellow', hex: '#ffff00' },
+            { level: 'CSS Level 1', name: 'navy', hex: '#000080' }, { level: 'CSS Level 1', name: 'blue', hex: '#0000ff' },
+            { level: 'CSS Level 1', name: 'teal', hex: '#008080' }, { level: 'CSS Level 1', name: 'aqua', hex: '#00ffff' },
             // CSS Level 2
             { level: 'CSS Level 2', name: 'orange', hex: '#ffa500' },
-
             // CSS Level 3
-            { level: 'CSS Level 3', name: 'aliceblue', hex: '#f0f8ff' },
-            { level: 'CSS Level 3', name: 'antiquewhite', hex: '#faebd7' },
-            { level: 'CSS Level 3', name: 'aquamarine', hex: '#7fffd4' },
-            { level: 'CSS Level 3', name: 'azure', hex: '#f0ffff' },
-            { level: 'CSS Level 3', name: 'beige', hex: '#f5f5dc' },
-            { level: 'CSS Level 3', name: 'bisque', hex: '#ffe4c4' },
-            { level: 'CSS Level 3', name: 'blanchedalmond', hex: '#ffebcd' },
-            { level: 'CSS Level 3', name: 'blueviolet', hex: '#8a2be2' },
-            { level: 'CSS Level 3', name: 'brown', hex: '#a52a2a' },
-            { level: 'CSS Level 3', name: 'burlywood', hex: '#deb887' },
-            { level: 'CSS Level 3', name: 'cadetblue', hex: '#5f9ea0' },
-            { level: 'CSS Level 3', name: 'chartreuse', hex: '#7fff00' },
-            { level: 'CSS Level 3', name: 'chocolate', hex: '#d2691e' },
-            { level: 'CSS Level 3', name: 'coral', hex: '#ff7f50' },
-            { level: 'CSS Level 3', name: 'cornflowerblue', hex: '#6495ed' },
-            { level: 'CSS Level 3', name: 'cornsilk', hex: '#fff8dc' },
-            { level: 'CSS Level 3', name: 'crimson', hex: '#dc143c' },
-            { level: 'CSS Level 3', name: 'cyan', hex: '#00ffff' },
-            { level: 'CSS Level 3', name: 'darkblue', hex: '#00008b' },
-            { level: 'CSS Level 3', name: 'darkcyan', hex: '#008b8b' },
-            { level: 'CSS Level 3', name: 'darkgoldenrod', hex: '#b8860b' },
-            { level: 'CSS Level 3', name: 'darkgray', hex: '#a9a9a9' },
-            { level: 'CSS Level 3', name: 'darkgreen', hex: '#006400' },
-            { level: 'CSS Level 3', name: 'darkgrey', hex: '#a9a9a9' },
-            { level: 'CSS Level 3', name: 'darkkhaki', hex: '#bdb76b' },
-            { level: 'CSS Level 3', name: 'darkmagenta', hex: '#8b008b' },
-            { level: 'CSS Level 3', name: 'darkolivegreen', hex: '#556b2f' },
-            { level: 'CSS Level 3', name: 'darkorange', hex: '#ff8c00' },
-            { level: 'CSS Level 3', name: 'darkorchid', hex: '#9932cc' },
-            { level: 'CSS Level 3', name: 'darkred', hex: '#8b0000' },
-            { level: 'CSS Level 3', name: 'darksalmon', hex: '#e9967a' },
-            { level: 'CSS Level 3', name: 'darkseagreen', hex: '#8fbc8f' },
-            { level: 'CSS Level 3', name: 'darkslateblue', hex: '#483d8b' },
-            { level: 'CSS Level 3', name: 'darkslategray', hex: '#2f4f4f' },
-            { level: 'CSS Level 3', name: 'darkslategrey', hex: '#2f4f4f' },
-            { level: 'CSS Level 3', name: 'darkturquoise', hex: '#00ced1' },
-            { level: 'CSS Level 3', name: 'darkviolet', hex: '#9400d3' },
-            { level: 'CSS Level 3', name: 'deeppink', hex: '#ff1493' },
-            { level: 'CSS Level 3', name: 'deepskyblue', hex: '#00bfff' },
-            { level: 'CSS Level 3', name: 'dimgray', hex: '#696969' },
-            { level: 'CSS Level 3', name: 'dimgrey', hex: '#696969' },
-            { level: 'CSS Level 3', name: 'dodgerblue', hex: '#1e90ff' },
-            { level: 'CSS Level 3', name: 'firebrick', hex: '#b22222' },
-            { level: 'CSS Level 3', name: 'floralwhite', hex: '#fffaf0' },
-            { level: 'CSS Level 3', name: 'forestgreen', hex: '#228b22' },
-            { level: 'CSS Level 3', name: 'gainsboro', hex: '#dcdcdc' },
-            { level: 'CSS Level 3', name: 'ghostwhite', hex: '#f8f8ff' },
-            { level: 'CSS Level 3', name: 'gold', hex: '#ffd700' },
-            { level: 'CSS Level 3', name: 'goldenrod', hex: '#daa520' },
-            { level: 'CSS Level 3', name: 'greenyellow', hex: '#adff2f' },
-            { level: 'CSS Level 3', name: 'grey', hex: '#808080' },
-            { level: 'CSS Level 3', name: 'honeydew', hex: '#f0fff0' },
-            { level: 'CSS Level 3', name: 'hotpink', hex: '#ff69b4' },
-            { level: 'CSS Level 3', name: 'indianred', hex: '#cd5c5c' },
-            { level: 'CSS Level 3', name: 'indigo', hex: '#4b0082' },
-            { level: 'CSS Level 3', name: 'ivory', hex: '#fffff0' },
-            { level: 'CSS Level 3', name: 'khaki', hex: '#f0e68c' },
-            { level: 'CSS Level 3', name: 'lavender', hex: '#e6e6fa' },
-            { level: 'CSS Level 3', name: 'lavenderblush', hex: '#fff0f5' },
-            { level: 'CSS Level 3', name: 'lawngreen', hex: '#7cfc00' },
-            { level: 'CSS Level 3', name: 'lemonchiffon', hex: '#fffacd' },
-            { level: 'CSS Level 3', name: 'lightblue', hex: '#add8e6' },
-            { level: 'CSS Level 3', name: 'lightcoral', hex: '#f08080' },
-            { level: 'CSS Level 3', name: 'lightcyan', hex: '#e0ffff' },
-            { level: 'CSS Level 3', name: 'lightgoldenrodyellow', hex: '#fafad2' },
-            { level: 'CSS Level 3', name: 'lightgray', hex: '#d3d3d3' },
-            { level: 'CSS Level 3', name: 'lightgreen', hex: '#90ee90' },
-            { level: 'CSS Level 3', name: 'lightgrey', hex: '#d3d3d3' },
-            { level: 'CSS Level 3', name: 'lightpink', hex: '#ffb6c1' },
-            { level: 'CSS Level 3', name: 'lightsalmon', hex: '#ffa07a' },
-            { level: 'CSS Level 3', name: 'lightseagreen', hex: '#20b2aa' },
-            { level: 'CSS Level 3', name: 'lightskyblue', hex: '#87cefa' },
-            { level: 'CSS Level 3', name: 'lightslategray', hex: '#778899' },
-            { level: 'CSS Level 3', name: 'lightslategrey', hex: '#778899' },
-            { level: 'CSS Level 3', name: 'lightsteelblue', hex: '#b0c4de' },
-            { level: 'CSS Level 3', name: 'lightyellow', hex: '#ffffe0' },
-            { level: 'CSS Level 3', name: 'limegreen', hex: '#32cd32' },
-            { level: 'CSS Level 3', name: 'linen', hex: '#faf0e6' },
-            { level: 'CSS Level 3', name: 'magenta', hex: '#ff00ff' },
-            { level: 'CSS Level 3', name: 'mediumaquamarine', hex: '#66cdaa' },
-            { level: 'CSS Level 3', name: 'mediumblue', hex: '#0000cd' },
-            { level: 'CSS Level 3', name: 'mediumorchid', hex: '#ba55d3' },
-            { level: 'CSS Level 3', name: 'mediumpurple', hex: '#9370db' },
-            { level: 'CSS Level 3', name: 'mediumseagreen', hex: '#3cb371' },
-            { level: 'CSS Level 3', name: 'mediumslateblue', hex: '#7b68ee' },
-            { level: 'CSS Level 3', name: 'mediumspringgreen', hex: '#00fa9a' },
-            { level: 'CSS Level 3', name: 'mediumturquoise', hex: '#48d1cc' },
-            { level: 'CSS Level 3', name: 'mediumvioletred', hex: '#c71585' },
-            { level: 'CSS Level 3', name: 'midnightblue', hex: '#191970' },
-            { level: 'CSS Level 3', name: 'mintcream', hex: '#f5fffa' },
-            { level: 'CSS Level 3', name: 'mistyrose', hex: '#ffe4e1' },
-            { level: 'CSS Level 3', name: 'moccasin', hex: '#ffe4b5' },
-            { level: 'CSS Level 3', name: 'navajowhite', hex: '#ffdead' },
-            { level: 'CSS Level 3', name: 'oldlace', hex: '#fdf5e6' },
-            { level: 'CSS Level 3', name: 'olivedrab', hex: '#6b8e23' },
-            { level: 'CSS Level 3', name: 'orangered', hex: '#ff4500' },
-            { level: 'CSS Level 3', name: 'orchid', hex: '#da70d6' },
-            { level: 'CSS Level 3', name: 'palegoldenrod', hex: '#eee8aa' },
-            { level: 'CSS Level 3', name: 'palegreen', hex: '#98fb98' },
-            { level: 'CSS Level 3', name: 'paleturquoise', hex: '#afeeee' },
-            { level: 'CSS Level 3', name: 'palevioletred', hex: '#db7093' },
-            { level: 'CSS Level 3', name: 'papayawhip', hex: '#ffefd5' },
-            { level: 'CSS Level 3', name: 'peachpuff', hex: '#ffdab9' },
-            { level: 'CSS Level 3', name: 'peru', hex: '#cd853f' },
-            { level: 'CSS Level 3', name: 'pink', hex: '#ffc0cb' },
-            { level: 'CSS Level 3', name: 'plum', hex: '#dda0dd' },
-            { level: 'CSS Level 3', name: 'powderblue', hex: '#b0e0e6' },
-            { level: 'CSS Level 3', name: 'rosybrown', hex: '#bc8f8f' },
-            { level: 'CSS Level 3', name: 'royalblue', hex: '#4169e1' },
-            { level: 'CSS Level 3', name: 'saddlebrown', hex: '#8b4513' },
-            { level: 'CSS Level 3', name: 'salmon', hex: '#fa8072' },
-            { level: 'CSS Level 3', name: 'sandybrown', hex: '#f4a460' },
-            { level: 'CSS Level 3', name: 'seagreen', hex: '#2e8b57' },
-            { level: 'CSS Level 3', name: 'seashell', hex: '#fff5ee' },
-            { level: 'CSS Level 3', name: 'sienna', hex: '#a0522d' },
-            { level: 'CSS Level 3', name: 'skyblue', hex: '#87ceeb' },
-            { level: 'CSS Level 3', name: 'slateblue', hex: '#6a5acd' },
-            { level: 'CSS Level 3', name: 'slategray', hex: '#708090' },
-            { level: 'CSS Level 3', name: 'slategrey', hex: '#708090' },
-            { level: 'CSS Level 3', name: 'snow', hex: '#fffafa' },
-            { level: 'CSS Level 3', name: 'springgreen', hex: '#00ff7f' },
-            { level: 'CSS Level 3', name: 'steelblue', hex: '#4682b4' },
-            { level: 'CSS Level 3', name: 'tan', hex: '#d2b48c' },
-            { level: 'CSS Level 3', name: 'thistle', hex: '#d8bfd8' },
-            { level: 'CSS Level 3', name: 'tomato', hex: '#ff6347' },
-            { level: 'CSS Level 3', name: 'turquoise', hex: '#40e0d0' },
-            { level: 'CSS Level 3', name: 'violet', hex: '#ee82ee' },
-            { level: 'CSS Level 3', name: 'wheat', hex: '#f5deb3' },
-            { level: 'CSS Level 3', name: 'whitesmoke', hex: '#f5f5f5' },
-            { level: 'CSS Level 3', name: 'yellowgreen', hex: '#9acd32' },
-
+            { level: 'CSS Level 3', name: 'aliceblue', hex: '#f0f8ff' }, { level: 'CSS Level 3', name: 'antiquewhite', hex: '#faebd7' },
+            { level: 'CSS Level 3', name: 'aquamarine', hex: '#7fffd4' }, { level: 'CSS Level 3', name: 'azure', hex: '#f0ffff' },
+            { level: 'CSS Level 3', name: 'beige', hex: '#f5f5dc' }, { level: 'CSS Level 3', name: 'bisque', hex: '#ffe4c4' },
+            { level: 'CSS Level 3', name: 'blanchedalmond', hex: '#ffebcd' }, { level: 'CSS Level 3', name: 'blueviolet', hex: '#8a2be2' },
+            { level: 'CSS Level 3', name: 'brown', hex: '#a52a2a' }, { level: 'CSS Level 3', name: 'burlywood', hex: '#deb887' },
+            { level: 'CSS Level 3', name: 'cadetblue', hex: '#5f9ea0' }, { level: 'CSS Level 3', name: 'chartreuse', hex: '#7fff00' },
+            { level: 'CSS Level 3', name: 'chocolate', hex: '#d2691e' }, { level: 'CSS Level 3', name: 'coral', hex: '#ff7f50' },
+            { level: 'CSS Level 3', name: 'cornflowerblue', hex: '#6495ed' }, { level: 'CSS Level 3', name: 'cornsilk', hex: '#fff8dc' },
+            { level: 'CSS Level 3', name: 'crimson', hex: '#dc143c' }, { level: 'CSS Level 3', name: 'cyan', hex: '#00ffff' },
+            { level: 'CSS Level 3', name: 'darkblue', hex: '#00008b' }, { level: 'CSS Level 3', name: 'darkcyan', hex: '#008b8b' },
+            { level: 'CSS Level 3', name: 'darkgoldenrod', hex: '#b8860b' }, { level: 'CSS Level 3', name: 'darkgray', hex: '#a9a9a9' },
+            { level: 'CSS Level 3', name: 'darkgreen', hex: '#006400' }, { level: 'CSS Level 3', name: 'darkkhaki', hex: '#bdb76b' },
+            { level: 'CSS Level 3', name: 'darkmagenta', hex: '#8b008b' }, { level: 'CSS Level 3', name: 'darkolivegreen', hex: '#556b2f' },
+            { level: 'CSS Level 3', name: 'darkorange', hex: '#ff8c00' }, { level: 'CSS Level 3', name: 'darkorchid', hex: '#9932cc' },
+            { level: 'CSS Level 3', name: 'darkred', hex: '#8b0000' }, { level: 'CSS Level 3', name: 'darksalmon', hex: '#e9967a' },
+            { level: 'CSS Level 3', name: 'darkseagreen', hex: '#8fbc8f' }, { level: 'CSS Level 3', name: 'darkslateblue', hex: '#483d8b' },
+            { level: 'CSS Level 3', name: 'darkslategray', hex: '#2f4f4f' }, { level: 'CSS Level 3', name: 'darkturquoise', hex: '#00ced1' },
+            { level: 'CSS Level 3', name: 'darkviolet', hex: '#9400d3' }, { level: 'CSS Level 3', name: 'deeppink', hex: '#ff1493' },
+            { level: 'CSS Level 3', name: 'deepskyblue', hex: '#00bfff' }, { level: 'CSS Level 3', name: 'dimgray', hex: '#696969' },
+            { level: 'CSS Level 3', name: 'dodgerblue', hex: '#1e90ff' }, { level: 'CSS Level 3', name: 'firebrick', hex: '#b22222' },
+            { level: 'CSS Level 3', name: 'floralwhite', hex: '#fffaf0' }, { level: 'CSS Level 3', name: 'forestgreen', hex: '#228b22' },
+            { level: 'CSS Level 3', name: 'gainsboro', hex: '#dcdcdc' }, { level: 'CSS Level 3', name: 'ghostwhite', hex: '#f8f8ff' },
+            { level: 'CSS Level 3', name: 'gold', hex: '#ffd700' }, { level: 'CSS Level 3', name: 'goldenrod', hex: '#daa520' },
+            { level: 'CSS Level 3', name: 'greenyellow', hex: '#adff2f' }, { level: 'CSS Level 3', name: 'honeydew', hex: '#f0fff0' },
+            { level: 'CSS Level 3', name: 'hotpink', hex: '#ff69b4' }, { level: 'CSS Level 3', name: 'indianred', hex: '#cd5c5c' },
+            { level: 'CSS Level 3', name: 'indigo', hex: '#4b0082' }, { level: 'CSS Level 3', name: 'ivory', hex: '#fffff0' },
+            { level: 'CSS Level 3', name: 'khaki', hex: '#f0e68c' }, { level: 'CSS Level 3', name: 'lavender', hex: '#e6e6fa' },
+            { level: 'CSS Level 3', name: 'lavenderblush', hex: '#fff0f5' }, { level: 'CSS Level 3', name: 'lawngreen', hex: '#7cfc00' },
+            { level: 'CSS Level 3', name: 'lemonchiffon', hex: '#fffacd' }, { level: 'CSS Level 3', name: 'lightblue', hex: '#add8e6' },
+            { level: 'CSS Level 3', name: 'lightcoral', hex: '#f08080' }, { level: 'CSS Level 3', name: 'lightcyan', hex: '#e0ffff' },
+            { level: 'CSS Level 3', name: 'lightgoldenrodyellow', hex: '#fafad2' }, { level: 'CSS Level 3', name: 'lightgray', hex: '#d3d3d3' },
+            { level: 'CSS Level 3', name: 'lightgreen', hex: '#90ee90' }, { level: 'CSS Level 3', name: 'lightpink', hex: '#ffb6c1' },
+            { level: 'CSS Level 3', name: 'lightsalmon', hex: '#ffa07a' }, { level: 'CSS Level 3', name: 'lightseagreen', hex: '#20b2aa' },
+            { level: 'CSS Level 3', name: 'lightskyblue', hex: '#87cefa' }, { level: 'CSS Level 3', name: 'lightslategray', hex: '#778899' },
+            { level: 'CSS Level 3', name: 'lightsteelblue', hex: '#b0c4de' }, { level: 'CSS Level 3', name: 'lightyellow', hex: '#ffffe0' },
+            { level: 'CSS Level 3', name: 'limegreen', hex: '#32cd32' }, { level: 'CSS Level 3', name: 'linen', hex: '#faf0e6' },
+            { level: 'CSS Level 3', name: 'mediumaquamarine', hex: '#66cdaa' }, { level: 'CSS Level 3', name: 'mediumblue', hex: '#0000cd' },
+            { level: 'CSS Level 3', name: 'mediumorchid', hex: '#ba55d3' }, { level: 'CSS Level 3', name: 'mediumpurple', hex: '#9370db' },
+            { level: 'CSS Level 3', name: 'mediumseagreen', hex: '#3cb371' }, { level: 'CSS Level 3', name: 'mediumslateblue', hex: '#7b68ee' },
+            { level: 'CSS Level 3', name: 'mediumspringgreen', hex: '#00fa9a' }, { level: 'CSS Level 3', name: 'mediumturquoise', hex: '#48d1cc' },
+            { level: 'CSS Level 3', name: 'mediumvioletred', hex: '#c71585' }, { level: 'CSS Level 3', name: 'midnightblue', hex: '#191970' },
+            { level: 'CSS Level 3', name: 'mintcream', hex: '#f5fffa' }, { level: 'CSS Level 3', name: 'mistyrose', hex: '#ffe4e1' },
+            { level: 'CSS Level 3', name: 'moccasin', hex: '#ffe4b5' }, { level: 'CSS Level 3', name: 'navajowhite', hex: '#ffdead' },
+            { level: 'CSS Level 3', name: 'oldlace', hex: '#fdf5e6' }, { level: 'CSS Level 3', name: 'olivedrab', hex: '#6b8e23' },
+            { level: 'CSS Level 3', name: 'orangered', hex: '#ff4500' }, { level: 'CSS Level 3', name: 'orchid', hex: '#da70d6' },
+            { level: 'CSS Level 3', name: 'palegoldenrod', hex: '#eee8aa' }, { level: 'CSS Level 3', name: 'palegreen', hex: '#98fb98' },
+            { level: 'CSS Level 3', name: 'paleturquoise', hex: '#afeeee' }, { level: 'CSS Level 3', name: 'palevioletred', hex: '#db7093' },
+            { level: 'CSS Level 3', name: 'papayawhip', hex: '#ffefd5' }, { level: 'CSS Level 3', name: 'peachpuff', hex: '#ffdab9' },
+            { level: 'CSS Level 3', name: 'peru', hex: '#cd853f' }, { level: 'CSS Level 3', name: 'pink', hex: '#ffc0cb' },
+            { level: 'CSS Level 3', name: 'plum', hex: '#dda0dd' }, { level: 'CSS Level 3', name: 'powderblue', hex: '#b0e0e6' },
+            { level: 'CSS Level 3', name: 'rosybrown', hex: '#bc8f8f' }, { level: 'CSS Level 3', name: 'royalblue', hex: '#4169e1' },
+            { level: 'CSS Level 3', name: 'saddlebrown', hex: '#8b4513' }, { level: 'CSS Level 3', name: 'salmon', hex: '#fa8072' },
+            { level: 'CSS Level 3', name: 'sandybrown', hex: '#f4a460' }, { level: 'CSS Level 3', name: 'seagreen', hex: '#2e8b57' },
+            { level: 'CSS Level 3', name: 'seashell', hex: '#fff5ee' }, { level: 'CSS Level 3', name: 'sienna', hex: '#a0522d' },
+            { level: 'CSS Level 3', name: 'skyblue', hex: '#87ceeb' }, { level: 'CSS Level 3', name: 'slateblue', hex: '#6a5acd' },
+            { level: 'CSS Level 3', name: 'slategray', hex: '#708090' }, { level: 'CSS Level 3', name: 'snow', hex: '#fffafa' },
+            { level: 'CSS Level 3', name: 'springgreen', hex: '#00ff7f' }, { level: 'CSS Level 3', name: 'steelblue', hex: '#4682b4' },
+            { level: 'CSS Level 3', name: 'tan', hex: '#d2b48c' }, { level: 'CSS Level 3', name: 'thistle', hex: '#d8bfd8' },
+            { level: 'CSS Level 3', name: 'tomato', hex: '#ff6347' }, { level: 'CSS Level 3', name: 'turquoise', hex: '#40e0d0' },
+            { level: 'CSS Level 3', name: 'violet', hex: '#ee82ee' }, { level: 'CSS Level 3', name: 'wheat', hex: '#f5deb3' },
+            { level: 'CSS Level 3', name: 'whitesmoke', hex: '#f5f5f5' }, { level: 'CSS Level 3', name: 'yellowgreen', hex: '#9acd32' },
             // CSS Level 4
             { level: 'CSS Level 4', name: 'rebeccapurple', hex: '#663399' },
-
-            // ====== THÊM MỚI: Modern Pastel / UI Colors ======
-            { level: 'Modern Pastel', name: 'pastel pink', hex: '#ffd1dc' },
-            { level: 'Modern Pastel', name: 'mint green', hex: '#98ff98' },
-            { level: 'Modern Pastel', name: 'baby blue', hex: '#89cff0' },
-            { level: 'Modern Pastel', name: 'lavender blush', hex: '#fff0f5' },
-            { level: 'Modern Pastel', name: 'lemon chiffon', hex: '#fffacd' },
-            { level: 'Modern Pastel', name: 'peach puff', hex: '#ffdab9' },
-            { level: 'Modern Pastel', name: 'coral reef', hex: '#fd7f6f' },
-            { level: 'Modern Pastel', name: 'lilac', hex: '#c8a2c8' },
-            { level: 'Modern Pastel', name: 'periwinkle', hex: '#ccccff' },
-            { level: 'Modern Pastel', name: 'melon', hex: '#fdbcb4' },
-            { level: 'Modern Pastel', name: 'tea green', hex: '#d0f0c0' },
-            { level: 'Modern Pastel', name: 'dusty rose', hex: '#dcae96' },
-            { level: 'Modern Pastel', name: 'soft butter', hex: '#fdfd96' },
-            { level: 'Modern Pastel', name: 'aero blue', hex: '#c9ffe5' },
-            { level: 'Modern Pastel', name: 'mauve', hex: '#e0b0ff' },
-            { level: 'Modern Pastel', name: 'champagne', hex: '#fad6a5' },
-            { level: 'Modern Pastel', name: 'magic mint', hex: '#aaf0d1' },
-            { level: 'Modern Pastel', name: 'columbia blue', hex: '#9bddff' },
-            { level: 'Modern Pastel', name: 'apricot', hex: '#fbceb1' },
-            { level: 'Modern Pastel', name: 'cherry blossom', hex: '#ffb7c5' }
+            // R Base Colors (Thay thế Modern Pastel cũ để chạy chuẩn 100% trong R)
+            { level: 'R Base Pastel', name: 'lightpink1', hex: '#ffaeb9' }, { level: 'R Base Pastel', name: 'palegreen1', hex: '#9aff9a' },
+            { level: 'R Base Pastel', name: 'lightskyblue1', hex: '#b0e2ff' }, { level: 'R Base Pastel', name: 'mistyrose1', hex: '#ffe4e1' },
+            { level: 'R Base Pastel', name: 'lemonchiffon1', hex: '#fffacd' }, { level: 'R Base Pastel', name: 'peachpuff1', hex: '#ffdab9' },
+            { level: 'R Base Pastel', name: 'darkseagreen1', hex: '#c1ffc1' }, { level: 'R Base Pastel', name: 'thistle1', hex: '#ffe1ff' },
+            { level: 'R Base Pastel', name: 'plum1', hex: '#ffbbff' }, { level: 'R Base Pastel', name: 'lightgoldenrod1', hex: '#ffec8b' },
+            { level: 'R Base Pastel', name: 'lavenderblush1', hex: '#fff0f5' }, { level: 'R Base Pastel', name: 'rosybrown1', hex: '#ffc1c1' },
+            { level: 'R Base Pastel', name: 'aquamarine1', hex: '#7fffd4' }, { level: 'R Base Pastel', name: 'lightcyan1', hex: '#e0ffff' }
         ];
 
-        const levels = ['Tất cả', 'CSS Level 1', 'CSS Level 2', 'CSS Level 3', 'CSS Level 4', 'Modern Pastel'];
+        /* ==========================================
+           2. DATA: FONTAWESOME ICONS EXPANDED (SỬA LỖI HIỂN THỊ: Dùng fa-solid, fa-brands)
+           ========================================== */
+        const iconData = [
+            // --- Phân tích & Dữ liệu ---
+            { cat: 'Phân tích & Dữ liệu', name: 'chart-bar', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'chart-line', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'chart-pie', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'chart-area', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'chart-column', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'chart-gantt', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'chart-simple', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'table', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'table-columns', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'database', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'server', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'file-csv', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'file-excel', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'diagram-project', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'calculator', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'network-wired', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'filter', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'magnifying-glass-chart', style: 'fa-solid' },
+            { cat: 'Phân tích & Dữ liệu', name: 'square-poll-vertical', style: 'fa-solid' }, { cat: 'Phân tích & Dữ liệu', name: 'square-poll-horizontal', style: 'fa-solid' },
+            
+            // --- Web & Giao diện (UI) ---
+            { cat: 'Web & Giao diện', name: 'house', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'user', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'users', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'magnifying-glass', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'check', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'xmark', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'gear', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'bell', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'envelope', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'star', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'heart', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'location-dot', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'calendar', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'calendar-days', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'image', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'camera', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'video', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'music', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'comment', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'share-nodes', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'paper-plane', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'trash', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'pen-to-square', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'circle-info', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'circle-exclamation', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'circle-check', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'spinner', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'download', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'upload', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'cloud', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'bars', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'ellipsis-vertical', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'sliders', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'toggle-on', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'toggle-off', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'eye', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'eye-slash', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'link', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'paperclip', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'bookmark', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'tag', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'thumbs-up', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'thumbs-down', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'circle-play', style: 'fa-solid' },
+            { cat: 'Web & Giao diện', name: 'circle-pause', style: 'fa-solid' }, { cat: 'Web & Giao diện', name: 'circle-stop', style: 'fa-solid' },
 
-        // DOM Elements
+            // --- Mũi tên & Điều hướng ---
+            { cat: 'Mũi tên & Điều hướng', name: 'arrow-right', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'arrow-left', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'arrow-up', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'arrow-down', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'chevron-right', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'chevron-left', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'chevron-up', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'chevron-down', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'caret-right', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'caret-left', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'caret-up', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'caret-down', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'angles-right', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'angles-left', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'compass', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'location-arrow', style: 'fa-solid' },
+            { cat: 'Mũi tên & Điều hướng', name: 'map', style: 'fa-solid' }, { cat: 'Mũi tên & Điều hướng', name: 'map-pin', style: 'fa-solid' },
+
+            // --- Tài liệu & Tệp tin ---
+            { cat: 'Tài liệu & Tệp tin', name: 'folder', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'folder-open', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'folder-plus', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'folder-minus', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'file', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'file-lines', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'file-word', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'file-pdf', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'file-powerpoint', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'file-image', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'file-audio', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'file-video', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'file-code', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'file-zipper', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'copy', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'paste', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'clipboard', style: 'fa-solid' }, { cat: 'Tài liệu & Tệp tin', name: 'clipboard-list', style: 'fa-solid' },
+            { cat: 'Tài liệu & Tệp tin', name: 'box-archive', style: 'fa-solid' },
+
+            // --- Thiết bị & Công nghệ ---
+            { cat: 'Thiết bị & Công nghệ', name: 'desktop', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'laptop', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'laptop-code', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'mobile', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'mobile-screen-button', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'tablet', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'keyboard', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'mouse', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'print', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'microchip', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'wifi', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'bluetooth', style: 'fa-brands' },
+            { cat: 'Thiết bị & Công nghệ', name: 'battery-full', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'battery-half', style: 'fa-solid' },
+            { cat: 'Thiết bị & Công nghệ', name: 'battery-empty', style: 'fa-solid' }, { cat: 'Thiết bị & Công nghệ', name: 'plug', style: 'fa-solid' },
+
+            // --- Khoa học & Giáo dục ---
+            { cat: 'Khoa học & Giáo dục', name: 'flask', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'atom', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'dna', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'microscope', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'vial', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'vials', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'graduation-cap', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'book', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'book-open', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'book-journal-whills', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'chalkboard-user', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'school', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'pen', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'pencil', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'ruler', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'compass-drafting', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'brain', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'globe', style: 'fa-solid' },
+            { cat: 'Khoa học & Giáo dục', name: 'satellite-dish', style: 'fa-solid' }, { cat: 'Khoa học & Giáo dục', name: 'telescope', style: 'fa-solid' },
+
+            // --- Y tế & Sức khỏe ---
+            { cat: 'Y tế & Sức khỏe', name: 'heart-pulse', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'stethoscope', style: 'fa-solid' },
+            { cat: 'Y tế & Sức khỏe', name: 'pills', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'syringe', style: 'fa-solid' },
+            { cat: 'Y tế & Sức khỏe', name: 'virus', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'hospital', style: 'fa-solid' },
+            { cat: 'Y tế & Sức khỏe', name: 'notes-medical', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'temperature-half', style: 'fa-solid' },
+            { cat: 'Y tế & Sức khỏe', name: 'tooth', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'bone', style: 'fa-solid' },
+            { cat: 'Y tế & Sức khỏe', name: 'lungs', style: 'fa-solid' }, { cat: 'Y tế & Sức khỏe', name: 'prescription', style: 'fa-solid' },
+
+            // --- Kinh doanh & Tài chính ---
+            { cat: 'Kinh doanh & Tài chính', name: 'money-bill-wave', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'coins', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'wallet', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'credit-card', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'sack-dollar', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'shop', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'store', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'cart-shopping', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'bag-shopping', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'hand-holding-dollar', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'piggy-bank', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'briefcase', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'bullhorn', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'handshake', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'lightbulb', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'tags', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'receipt', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'box', style: 'fa-solid' },
+            { cat: 'Kinh doanh & Tài chính', name: 'boxes-stacked', style: 'fa-solid' }, { cat: 'Kinh doanh & Tài chính', name: 'truck-fast', style: 'fa-solid' },
+
+            // --- Sự vật, Đời sống & Tự nhiên ---
+            { cat: 'Sự vật & Đời sống', name: 'car', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'plane', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'bicycle', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'ship', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'motorcycle', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'train', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'tree', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'leaf', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'seedling', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'fire', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'droplet', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'bolt', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'sun', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'moon', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'cloud-sun', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'cloud-rain', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'crown', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'key', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'lock', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'shield', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'gamepad', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'mug-hot', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'utensils', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'burger', style: 'fa-solid' },
+            { cat: 'Sự vật & Đời sống', name: 'pizza-slice', style: 'fa-solid' }, { cat: 'Sự vật & Đời sống', name: 'wand-magic-sparkles', style: 'fa-solid' },
+
+            // --- Thương hiệu (Brands) & MXH ---
+            { cat: 'Thương hiệu & MXH', name: 'r-project', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'python', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'java', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'js', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'html5', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'css3-alt', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'react', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'vuejs', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'angular', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'node-js', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'npm', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'docker', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'aws', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'github', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'gitlab', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'bitbucket', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'windows', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'apple', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'linux', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'google', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'facebook', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'twitter', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'linkedin', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'youtube', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'instagram', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'tiktok', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'whatsapp', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'telegram', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'discord', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'slack', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'spotify', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'twitch', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'reddit', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'paypal', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'stripe', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'visa', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'mastercard', style: 'fa-brands' }, { cat: 'Thương hiệu & MXH', name: 'wordpress', style: 'fa-brands' },
+            { cat: 'Thương hiệu & MXH', name: 'kaggle', style: 'fa-brands' }
+        ];
+
+        /* ==========================================
+           3. APP LOGIC
+           ========================================== */
+        let currentTab = 'colors'; // 'colors' or 'icons'
+        let toastTimeout;
+
         const searchInput = document.getElementById('searchInput');
-        const levelFilter = document.getElementById('levelFilter');
-        const colorGrid = document.getElementById('colorGrid');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const mainGrid = document.getElementById('mainGrid');
         const statusIndicator = document.getElementById('statusIndicator');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const tabDescription = document.getElementById('tabDescription');
 
-        let toastTimeout;
+        // Khởi tạo các Filters tùy theo tab
+        function updateFilters() {
+            categoryFilter.innerHTML = '';
+            
+            const optionAll = document.createElement('option');
+            optionAll.value = 'Tất cả';
+            optionAll.textContent = 'Tất cả danh mục';
+            optionAll.className = "bg-zinc-800 text-zinc-200";
+            categoryFilter.appendChild(optionAll);
 
-        // Initialize Filter Dropdown
-        function initFilter() {
-            levels.forEach(level => {
+            let uniqueCategories = [];
+            if (currentTab === 'colors') {
+                searchInput.placeholder = "Tìm theo tên màu hoặc mã Hex...";
+                uniqueCategories = [...new Set(colorData.map(c => c.level))];
+            } else {
+                searchInput.placeholder = "Tìm theo tên Icon (vd: chart, user, folder)...";
+                uniqueCategories = [...new Set(iconData.map(i => i.cat))];
+            }
+
+            uniqueCategories.forEach(cat => {
                 const option = document.createElement('option');
-                option.value = level;
-                option.textContent = level;
-                option.className = "bg-slate-800 text-slate-200"; // Tùy chỉnh màu list cho Dark mode
-                levelFilter.appendChild(option);
+                option.value = cat;
+                option.textContent = cat;
+                option.className = "bg-zinc-800 text-zinc-200";
+                categoryFilter.appendChild(option);
             });
         }
 
-        // Sao chép vào Clipboard
-        window.copyColor = function(text, type) {
+        // Chuyển Tab và Cập nhật Hướng dẫn
+        window.switchTab = function(tab) {
+            currentTab = tab;
+            
+            const btnColors = document.getElementById('tab-colors');
+            const btnIcons = document.getElementById('tab-icons');
+
+            if (tab === 'colors') {
+                btnColors.className = "tab-active backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg";
+                btnIcons.className = "tab-inactive backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg";
+                
+                // Hướng dẫn R cho Tab Màu Sắc
+                tabDescription.innerHTML = `
+                    <i class="fa-solid fa-circle-info text-blue-400 mr-2"></i> 
+                    <b>Mẹo dùng cho R:</b> Toàn bộ tên màu dưới đây đã được chuẩn hóa (không có khoảng trắng) và <b>100% chạy được trong R base</b>. Bạn có thể sử dụng trực tiếp tên màu (vd: <code>col = "aliceblue"</code>, <code>fill = "lightpink1"</code>) hoặc mã Hex (vd: <code>col = "#f0f8ff"</code>) cho hàm <code>plot()</code>, hoặc thư viện <code>ggplot2</code>.
+                `;
+            } else {
+                btnIcons.className = "tab-active backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg";
+                btnColors.className = "tab-inactive backdrop-blur-md px-6 py-3 rounded-xl border font-semibold flex items-center gap-2 transition-all duration-300 shadow-lg";
+                
+                // Hướng dẫn R cho Tab Icon
+                tabDescription.innerHTML = `
+                    <i class="fa-solid fa-circle-info text-blue-400 mr-2"></i> 
+                    <b>Mẹo dùng cho R:</b> Đầu tiên cần cài đặt package qua lệnh: <code>install.packages("fontawesome")</code>. Sau đó hãy bấm nút <b>Copy R Code</b> trên thẻ Icon bạn thích và dán vào R Shiny, Quarto hoặc R Markdown (vd: <code>fa("chart-bar", fill = "steelblue")</code>).
+                `;
+            }
+
+            searchInput.value = '';
+            updateFilters();
+            renderContent();
+        }
+
+        // Copy Clipboard đa năng
+        window.copyText = function(text, type) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed";
@@ -324,7 +443,7 @@
             document.body.removeChild(textArea);
         };
 
-        // Hiển thị Toast
+        // Toast thông báo
         function showToast(message) {
             toastMessage.textContent = message;
             toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
@@ -337,74 +456,108 @@
             }, 3000);
         }
 
-        // Render Colors
-        function renderColors() {
+        // RENDER CHÍNH
+        function renderContent() {
             const searchVal = searchInput.value.toLowerCase();
-            const levelVal = levelFilter.value;
+            const filterVal = categoryFilter.value;
 
+            if (currentTab === 'colors') {
+                renderColors(searchVal, filterVal);
+            } else {
+                renderIcons(searchVal, filterVal);
+            }
+        }
+
+        // Render Bảng Màu
+        function renderColors(searchVal, filterVal) {
             const filteredColors = colorData.filter(color => {
                 const matchSearch = color.name.toLowerCase().includes(searchVal) || color.hex.toLowerCase().includes(searchVal);
-                const matchLevel = levelVal === 'Tất cả' || color.level === levelVal;
+                const matchLevel = filterVal === 'Tất cả' || color.level === filterVal;
                 return matchSearch && matchLevel;
             });
 
-            statusIndicator.textContent = `Đang hiển thị ${filteredColors.length} màu sắc`;
+            statusIndicator.innerHTML = `Đang hiển thị <b class="text-white">${filteredColors.length}</b> màu sắc`;
 
             if (filteredColors.length === 0) {
-                colorGrid.innerHTML = `
-                    <div class="col-span-full py-16 text-center text-slate-400 font-medium text-sm sm:text-base bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl">
-                        Không tìm thấy màu nào phù hợp.
-                    </div>
-                `;
+                mainGrid.innerHTML = `<div class="col-span-full py-16 text-center text-zinc-500 font-medium text-sm sm:text-base bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl">Không tìm thấy màu nào phù hợp.</div>`;
                 return;
             }
 
-            const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+            const copyIconSVG = `<i class="fa-regular fa-copy"></i>`;
 
-            colorGrid.innerHTML = filteredColors.map(color => `
-                <div class="group bg-slate-900/40 backdrop-blur-md border border-white/10 hover:bg-slate-800/60 hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 transition-all duration-200 rounded-2xl p-2.5 sm:p-3 flex flex-col gap-2 shadow-sm">
-                    
-                    <!-- Color Visual Block -->
-                    <div class="w-full h-16 sm:h-20 rounded-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] border border-white/5" style="background-color: ${color.hex}"></div>
-
-                    <!-- Color Details -->
+            mainGrid.innerHTML = filteredColors.map(color => `
+                <div class="group bg-zinc-900/40 backdrop-blur-md border border-white/5 hover:bg-zinc-800/60 hover:border-zinc-600/50 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:-translate-y-1 transition-all duration-200 rounded-2xl p-2.5 sm:p-3 flex flex-col gap-2 shadow-sm">
+                    <div class="w-full h-16 sm:h-20 rounded-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] border border-white/10" style="background-color: ${color.hex}"></div>
                     <div class="flex flex-col gap-2 flex-grow mt-1">
-                        <!-- Level Badge -->
-                        <span class="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 bg-slate-800/80 text-blue-300 rounded-full w-fit border border-slate-700/50">
+                        <span class="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 bg-zinc-800/80 text-zinc-300 rounded-full w-fit border border-zinc-700/50">
                             ${color.level}
                         </span>
-
-                        <!-- Name -->
                         <div class="flex items-center justify-between group/btn gap-1">
-                            <div class="font-semibold text-xs sm:text-sm text-slate-200 truncate capitalize" title="${color.name}">
-                                ${color.name}
-                            </div>
-                            <button onclick="copyColor('${color.name}', 'Tên màu')" class="p-1.5 bg-slate-800/50 hover:bg-slate-700 border border-transparent hover:border-blue-500/50 text-blue-400 rounded-lg transition-all active:scale-90 flex-shrink-0" title="Copy tên màu">
-                                ${copyIcon}
-                            </button>
+                            <div class="font-semibold text-xs sm:text-sm text-zinc-200 truncate" title="${color.name}">${color.name}</div>
+                            <button onclick="copyText('${color.name}', 'Tên màu')" class="p-1.5 bg-zinc-800/50 hover:bg-zinc-700 border border-transparent hover:border-zinc-500/50 text-zinc-400 rounded-lg transition-all active:scale-90 flex-shrink-0" title="Copy tên màu">${copyIconSVG}</button>
                         </div>
-
-                        <!-- Hex Code -->
                         <div class="flex items-center justify-between mt-auto gap-1">
-                            <div class="font-mono text-[10px] sm:text-xs text-slate-400 font-medium truncate">
-                                ${color.hex.toUpperCase()}
-                            </div>
-                            <button onclick="copyColor('${color.hex}', 'Mã Hex')" class="p-1.5 bg-slate-800/50 hover:bg-slate-700 border border-transparent hover:border-blue-500/50 text-blue-400 rounded-lg transition-all active:scale-90 flex-shrink-0" title="Copy mã Hex">
-                                ${copyIcon}
-                            </button>
+                            <div class="font-mono text-[10px] sm:text-xs text-zinc-400 font-medium truncate">${color.hex.toUpperCase()}</div>
+                            <button onclick="copyText('${color.hex}', 'Mã Hex')" class="p-1.5 bg-zinc-800/50 hover:bg-zinc-700 border border-transparent hover:border-zinc-500/50 text-zinc-400 rounded-lg transition-all active:scale-90 flex-shrink-0" title="Copy mã Hex">${copyIconSVG}</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
+        // Render Kho Icon
+        function renderIcons(searchVal, filterVal) {
+            const filteredIcons = iconData.filter(icon => {
+                const matchSearch = icon.name.toLowerCase().includes(searchVal);
+                const matchCat = filterVal === 'Tất cả' || icon.cat === filterVal;
+                return matchSearch && matchCat;
+            });
+
+            statusIndicator.innerHTML = `Đang hiển thị <b class="text-white">${filteredIcons.length}</b> icons`;
+
+            if (filteredIcons.length === 0) {
+                mainGrid.innerHTML = `<div class="col-span-full py-16 text-center text-zinc-500 font-medium text-sm sm:text-base bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl">Không tìm thấy icon nào phù hợp.</div>`;
+                return;
+            }
+
+            mainGrid.innerHTML = filteredIcons.map(icon => {
+                return `
+                <div class="group bg-zinc-900/40 backdrop-blur-md border border-white/5 hover:bg-zinc-800/60 hover:border-zinc-600/50 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:-translate-y-1 transition-all duration-200 rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center gap-3 shadow-sm relative overflow-hidden">
+                    
+                    <!-- Icon Display -->
+                    <div class="h-16 w-full flex items-center justify-center text-4xl sm:text-5xl text-zinc-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:scale-110 group-hover:text-white transition-all duration-300">
+                        <i class="${icon.style} fa-${icon.name}"></i>
+                    </div>
+
+                    <!-- Category Badge -->
+                    <span class="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 bg-zinc-800/80 text-zinc-400 rounded-full w-fit border border-zinc-700/50 mt-1 truncate max-w-full text-center">
+                        ${icon.cat}
+                    </span>
+
+                    <!-- Icon Name Display -->
+                    <div class="font-mono text-xs text-zinc-300 font-medium truncate w-full text-center" title="${icon.name}">
+                        ${icon.name}
+                    </div>
+
+                    <!-- Copy Actions Layer (Appears on Hover) -->
+                    <div class="absolute inset-0 bg-zinc-950/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-2">
+                        <button onclick="copyText('${icon.name}', 'Tên Icon')" class="w-full text-xs py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 hover:border-zinc-400 text-zinc-200 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-i-cursor"></i> Tên Icon
+                        </button>
+                        <button onclick="copyText('fa(\\'${icon.name}\\')', 'R Code')" class="w-full text-xs py-1.5 bg-neutral-800/80 hover:bg-neutral-700 border border-neutral-600/50 hover:border-neutral-400 text-white rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-r-project"></i> R Code
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
         // Event Listeners
-        searchInput.addEventListener('input', renderColors);
-        levelFilter.addEventListener('change', renderColors);
+        searchInput.addEventListener('input', renderContent);
+        categoryFilter.addEventListener('change', renderContent);
 
         // Run on load
-        initFilter();
-        renderColors();
+        switchTab('colors'); // Initialize default tab to show description
     </script>
 </body>
 </html>
